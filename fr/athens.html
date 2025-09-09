@@ -1,0 +1,662 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Page avec intro animée (in-flow, no-scroll, centré)</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="../js/main.js"></script>
+
+
+  <link rel="stylesheet" href="../style/main.css">
+
+  <script>
+        // détection basique du mobile
+    const isMobile = window.innerWidth <= 768;
+
+  </script>
+
+  <style>
+
+    html.no-scroll, body.no-scroll{
+      height:100vh;
+      overflow:hidden;
+      touch-action:none;
+    }
+
+    /* ---------- Intro ---------- */
+    .intro{
+      position:fixed;
+      inset:0;
+      height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      gap:8px;
+      background:transparent;
+      z-index:60;
+      pointer-events:none;
+      transition:height .7s cubic-bezier(.16,.84,.44,1), transform .45s ease, opacity .4s ease;
+      will-change:height, transform, opacity;
+      padding:2rem;
+      text-align:center;
+
+     background: url('../img/toile.jpg') no-repeat center center;
+     background-size: cover;
+    }
+    .intro--collapse{ height:40vh; }
+    .intro--inflow{
+      position:relative;
+      inset:auto;
+      height:40vh;
+      width:100%;
+      z-index:10;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      gap:8px;
+      margin-top: var(--header-height, 0px);
+      transition: margin-top .35s ease, height .2s ease, padding .2s ease;
+      pointer-events:auto;
+      padding:2rem 1.25rem;
+    }
+
+    .intro-title{
+      font-weight:800;
+      font-size:clamp(3rem, 7.2vw, 6rem);
+      transform-origin:center center;
+      opacity:0;
+      animation:introPop 1900ms cubic-bezier(.16,.84,.44,1) forwards;
+      will-change:transform, opacity;
+      margin:0;
+      background: url('../img/image2.png') no-repeat center center;
+      background-size: cover;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    @keyframes introPop{
+      0%{opacity:0; transform:scale(.8) translateY(8px) rotate(.5deg); filter:blur(6px)}
+      40%{opacity:1; transform:scale(1.06) translateY(-6px) rotate(-.3deg); filter:blur(0)}
+      70%{transform:scale(.98) translateY(0)}
+      100%{opacity:1; transform:scale(1) translateY(0)}
+    }
+
+
+
+
+
+    /* Hide main initially and push it */
+    main{
+      margin-top:calc(100vh + 2rem);
+      opacity:0;
+      transform:translateY(12px);
+      transition:margin-top .6s cubic-bezier(.2,.9,.25,1), opacity .6s ease .08s, transform .6s ease .08s;
+      pointer-events:none;
+    }
+    body.show-content main{
+      margin-top:calc(40vh + 3.5rem);
+      opacity:1;
+      transform:none;
+      pointer-events:auto;
+    }
+    body.intro-in-flow main{ margin-top:0rem; }
+
+
+  </style>
+</head>
+<body class="no-scroll">
+
+  <!-- Intro -->
+  <section class="intro" aria-hidden="false">
+      <h1 class="intro-title">Palimpseste - Athens</h1>
+  </section>
+
+  <!-- Header -->
+  <header role="banner">
+
+    <!-- Desktop nav -->
+    <nav class="primary" role="navigation" aria-label="Navigation principale">
+      <a href="index.html">Accueil</a>
+      <a href="directory.html">Artistes</a>
+      <a href="#">Athens</a>
+      <a href="#">Contact</a>
+    </nav>
+
+    <!-- Mobile controls: hamburger -->
+    <div class="mobile-controls" style="display:flex;align-items:center;">
+      <button class="nav-toggle" id="navToggle" aria-controls="mobileNav" aria-expanded="false" aria-label="Ouvrir le menu">
+        <span class="bar" aria-hidden="true"></span>
+        <span class="bar" aria-hidden="true"></span>
+        <span class="bar" aria-hidden="true"></span>
+      </button>
+    </div>
+
+    <!-- Mobile nav panel (duplicate links for mobile) -->
+    <div id="mobileNav" class="mobile-nav" aria-hidden="true">
+      <div class="mobile-links" role="menu" aria-label="Menu principal">
+        <a href="index.html" role="menuitem">Accueil</a>
+        <a href="directory.html" role="menuitem">Artistes</a>
+        <a href="#" role="menuitem">Projets</a>
+        <a href="#" role="menuitem">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main role="main">
+    
+
+<style>
+
+  .article {
+    background-color: white;
+    max-width: 500px;
+  }
+</style>
+
+
+
+  <style>
+    
+    .cta-section {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 4rem 8%;
+      overflow: hidden;
+    }
+
+    /* Contenu */
+    .cta-content {
+      position: relative;
+      z-index: 2;
+      width: 90%;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+
+    .cta-content h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .cta-content p {
+      /*margin-bottom: 2rem;*/
+    }
+
+
+    /* Fond image : état initial (invisible) */
+    .cta-section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: url("../img/image.png") center/cover no-repeat;
+      opacity: 0;
+      clip-path: inset(0 50% 0 50%); /* fermé au centre */
+      z-index: 1;
+    }
+
+    /* Quand on ajoute .animate-bg → animation desktop */
+    .cta-section.animate-bg::before {
+      animation: reveal-horizontal 1.0s ease forwards;
+    }
+
+    @keyframes reveal-horizontal {
+      0% {
+        clip-path: inset(0 50% 0 50%);
+        opacity: 0;
+      }
+      100% {
+        clip-path: inset(0 0 0 0);
+        opacity: 1;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .cta-section {
+        padding: 2rem;
+      }
+    }
+  </style>
+  <section class="cta-section" id="cta">
+    <div class="cta-content">
+
+
+    </div>
+  </section>
+  <script>
+    function startAnimation() {
+      document.getElementById("cta").classList.add("animate-bg");
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  <style>
+
+    :root{
+      --tile:#fbfbfb;            /* couleur des carreaux */
+      --grout:#d7d7d7;           /* couleur des joints */
+      --letter:#123238;         /* couleur des lettres (sombre, vert-bleu) */
+      --max-font:28px;
+    }
+
+    /* wrapper de la section */
+    .concorde-section{
+      position:relative;
+      /*min-height:60vh;*/
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      /* léger motif de carrelage qui rappelle la station */
+      background-image:
+        linear-gradient(to right, var(--grout) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grout) 1px, transparent 1px);
+      background-size:80px 80px; /* taille des "carreaux" */
+    }
+
+    /* SVG qui contient la grille de lettres, occupe tout le conteneur */
+    .letters-svg{
+      position:absolute;inset:0;width:100%;height:100%;display:block;
+      pointer-events:none; /* la grille est décorative */
+    }
+
+    /* style par défaut des lettres */
+    .letters-svg text.letter{
+      fill:var(--letter);
+      fill-opacity:.9;
+      font-family:'Cormorant Garamond', 'Georgia', 'Times', serif;
+      font-weight:600;
+      font-size:var(--max-font);
+      dominant-baseline:middle;
+      text-anchor:middle;
+      transform-origin:center;
+      opacity:0.95;
+      /* animation douce où les lettres flottent subtilement */
+      animation:float 6s ease-in-out infinite;
+    }
+
+    @keyframes float{
+      0%{transform:translateY(0) rotate(0) scale(1); opacity:0.95}
+      25%{transform:translateY(-6px) rotate(-1.2deg) scale(1.02);}
+      50%{transform:translateY(0) rotate(0) scale(1); opacity:0.85}
+      75%{transform:translateY(6px) rotate(1.2deg) scale(.99);}
+      100%{transform:translateY(0) rotate(0) scale(1); opacity:0.95}
+    }
+
+    /* variations pour que la grille ne soit pas trop mécanique */
+    .letters-svg text.small{font-size:0.72em; fill-opacity:.75}
+    .letters-svg text.light{fill-opacity:.6}
+    .letters-svg text.ghost{fill-opacity:.35}
+
+    /* concorde-overlay contenant le texte principal */
+    .concorde-overlay{
+      position:relative; /* au-dessus du SVG */
+      z-index:3;
+      width:100%;
+      padding:48px 48px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      align-items:flex-start;
+      justify-content:center;
+      box-sizing:border-box;
+
+      border-radius: 8px;
+      backdrop-filter: blur(1px);
+      background:rgba(255,255,255,0.6);
+    }
+
+    .concorde-overlay .content{
+      max-width: 1100px;
+      margin: auto;
+      position:relative;z-index:4; color: #0A1236;
+    }
+
+    .concorde-overlay h1{
+      font-size:clamp(1.6rem, 3.8vw, 3.2rem);letter-spacing:1px;
+        font-family: 'Playfair Display', serif;
+
+      color:#0A1236;
+    }
+    .concorde-overlay p{font-size:clamp(.95rem, 1.7vw, 1.1rem);opacity:.95;/*max-width:55ch*/}
+
+    /* petits ajustements responsive */
+    @media (max-width:640px){
+      :root{--max-font:20px}
+      .concorde-section{background-size:48px 48px}
+      .concorde-overlay{padding:28px}
+    }
+
+  </style>
+<section class="concorde-section" aria-label="Bannière style Concorde avec grille animée de lettres">
+  <!-- SVG dynamique créé par JS -->
+  <svg class="letters-svg" preserveAspectRatio="none" aria-hidden="true"></svg>
+
+  <!-- concorde-overlay semi-transparente avec texte par-dessus la grille -->
+  <div class="concorde-overlay" role="region" aria-label="Texte d'accroche">
+    <div class="backdrop" aria-hidden="true"></div>
+    <div class="content">
+      <h2 class="title">Chaque ville est un manuscrit sans fin, écrit, effacé et réinscrit par celles et ceux qui l’habitent.</h2>
+      <p>Palimpseste Urbain est un projet artistique collaboratif qui relie habitants, artistes et voyageurs autour d’une archive vivante des métropoles.<br>
+Mémoire, présent et futur s’y superposent comme des strates d’un même récit.<br>
+Photographies, récits, sons, graffitis, collages et visions poétiques viennent tisser une cartographie sensible, collective et évolutive.</p>
+<style>
+  #intention {
+    border: solid 1px #0A1236;
+  }
+  #intention:hover {
+    border: solid 1px white;
+    color: white;
+    background-color: #0A1236;
+  }
+</style>
+<a href="#services" class="btn" role="button" id="intention">En savoir plus</a>
+    </div>
+  </div>
+</section>
+<script>
+(() => {
+  const svg = document.querySelector('.letters-svg');
+  const str = `Cette collection accueille des textes qui explorent les formes poétiques actuelles,
+    qu’elles soient intimes, politiques, sociales ou expérimentales. La poésie y est envisagée
+    comme un laboratoire de langage et un miroir sensible du monde contemporain.`;
+  const pool = str.replace(/[,. '’]/g, '').toUpperCase();
+  const MAX_JITTER = 6;
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+
+  
+  // état
+  let paused = false;
+  let pendingResize = false;
+  let lastSize = { w: 0, h: 0 };
+  let resizeId = 0;
+  let letterNodes = [];
+
+  function build(force = false) {
+    if (paused && !force) return;
+
+    const w = Math.max(300, svg.clientWidth || window.innerWidth);
+    const h = Math.max(200, svg.clientHeight || window.innerHeight);
+
+    if (!force && letterNodes.length && lastSize.w === w && lastSize.h === h) {
+      return;
+    }
+
+    lastSize = { w, h };
+    const cellSize = Math.max(44, Math.min(88, Math.floor(Math.min(w, h) / 12)));
+    const cols = Math.max(2, Math.ceil(w / cellSize));
+    const rows = Math.max(2, Math.ceil(h / cellSize));
+    const total = cols * rows;
+
+    if (letterNodes.length !== total) {
+      svg.replaceChildren();
+      letterNodes = [];
+      svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+      svg.setAttribute('width', w);
+      svg.setAttribute('height', h);
+
+      const frag = document.createDocumentFragment();
+      let li = 0;
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const xBase = (cols === 1) ? w / 2 : (c * (w / (cols - 1)));
+          const yBase = (rows === 1) ? h / 2 : (r * (h / (rows - 1)));
+          const x = clamp(Math.round(xBase + (Math.random() * 2 - 1) * MAX_JITTER), 0, w);
+          const y = clamp(Math.round(yBase + (Math.random() * 2 - 1) * MAX_JITTER), 0, h);
+
+          const ch = pool[li % pool.length] || ' ';
+          li++;
+
+          const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          t.setAttribute('x', x);
+          t.setAttribute('y', y);
+
+          const classes = ['letter'];
+          if (Math.random() < 0.12) classes.push('small');
+          if (Math.random() < 0.25) classes.push('light');
+          if (Math.random() < 0.08) classes.push('ghost');
+          t.setAttribute('class', classes.join(' '));
+
+          t.textContent = ch;
+
+          // Sur desktop : animations actives
+          if (!isMobile) {
+            t.style.animationDelay = `${(Math.random() * 6).toFixed(2)}s`;
+            t.style.animationDuration = `${(5 + Math.random() * 6).toFixed(2)}s`;
+          } else {
+            // Sur mobile : pas d’animation
+            t.style.animation = 'none';
+          }
+
+          frag.appendChild(t);
+          letterNodes.push(t);
+        }
+      }
+      svg.appendChild(frag);
+    } else {
+      svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+      svg.setAttribute('width', w);
+      svg.setAttribute('height', h);
+    }
+
+    if (!paused && !isMobile) setAnimationState('running');
+  }
+
+  function rebuild() {
+    cancelAnimationFrame(resizeId);
+    resizeId = requestAnimationFrame(() => build());
+  }
+
+  function setAnimationState(state) {
+    for (const n of letterNodes) {
+      n.style.animationPlayState = state;
+    }
+  }
+
+  window.pauseLetters = () => {
+    if (paused) return;
+    paused = true;
+    setAnimationState('paused');
+    pendingResize = false;
+    cancelAnimationFrame(resizeId);
+  };
+
+  window.resumeLetters = () => {
+    if (!paused) return;
+    paused = false;
+    if (pendingResize) {
+      pendingResize = false;
+      build(true);
+    } else {
+      setAnimationState('running');
+    }
+  };
+
+  window.addEventListener('resize', () => {
+    const w = Math.max(300, svg.clientWidth || window.innerWidth);
+    const h = Math.max(200, svg.clientHeight || window.innerHeight);
+
+    if (paused) {
+      if (w !== lastSize.w || h !== lastSize.h) pendingResize = true;
+      return;
+    }
+    rebuild();
+  });
+
+  // build initial
+  build();
+
+  // si mobile : désactive tout mouvement
+  if (isMobile) {
+    window.pauseLetters();
+  }
+
+})();
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <style>
+    :root{
+      --section-height-lab: 60vh;
+      --overlay-color-lab: rgba(111,150,156,0.7); /* teinte au-dessus de l'image pour lisibilité */
+      --text-color-lab: #F2F2F2;
+      --blur-radius: 4px;
+      --bg-image: url('../img/lab.png'); /* remplace par ton image */
+    }
+
+    /* Section principale */
+    .hero-lab {
+      position: relative;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    /* Image de fond floutée via pseudo-élément */
+    .hero-lab::before{
+      content: "";
+      position: absolute;
+      inset: 0; /* top:0; right:0; bottom:0; left:0 */
+      background-image: var(--bg-image);
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+
+      /* on agrandit légèrement pour compenser le recadrage dû au flou */
+      transform: scale(1.05);
+
+      /* le flou visuel */
+      filter: blur(var(--blur-radius));
+      z-index: 0;
+      will-change: transform, filter;
+    }
+
+    /* Superposition (overlay) sombre pour contraster le texte */
+    .hero-lab::after{
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--overlay-color-lab);
+      z-index: 1;
+    }
+
+    /* Contenu placé au-dessus */
+    .hero-lab__content{
+      color: var(--text-color-lab);
+      position: relative; /* au-dessus des pseudo-éléments */
+      z-index: 2;
+      padding: clamp(2rem, 3vw, 2.5rem) 0;
+
+      max-width: 1100px;
+      width: 90%;
+    }
+
+    .hero-lab__title{
+      font-size: clamp(1.4rem, 4vw, 2.8rem);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      text-shadow: 0 6px 18px rgba(0,0,0,0.45);
+    }
+
+    .hero-lab__subtitle{
+      margin: 0;
+      font-size: clamp(.95rem, 2.2vw, 1.2rem);
+      margin-inline: auto;
+    }
+
+
+    /* Amélioration : pour les navigateurs qui ne supportent pas filter sur pseudo (très rare) */
+    @supports not (filter: blur(1px)) {
+      .hero-lab::before {
+        filter: none;
+        transform: none;
+        opacity: .65;
+      }
+    }
+
+    /* Responsive: réduire la hauteur sur très petits écrans */
+
+  </style>
+    <section class="hero-lab" aria-labelledby="hero-lab-title" role="region">
+      <div class="hero-lab__content">
+        <h2 id="hero-lab-title" class="title">Vous souhaitez contribuer, collaborer ou soutenir le projet ?</h2>
+        <p class="hero-lab__subtitle">Vous êtes <span class="bold">artiste</span>, <span class="bold">habitant·e</span>, <span class="bold">étudiant·e</span> ou simple curieux·se ?<br>
+Votre voix a sa place dans Palimpseste Urbain. Chaque contribution devient une strate de la ville.</p>
+        <p class="hero-lab__subtitle"><span class="bold">Institutions culturelles</span>, <span class="bold">galeries</span>, <span class="bold">collectifs</span>, <span class="bold">mécènes</span> : vos partenariats permettront de donner vie et visibilité à cette archive vivante.</p>
+        <a href="#services" class="btn" role="button">Nous contacter</a>
+      </div>
+    </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </main>
+
+  <script src="../js/index.js"></script>
+
+
+
+
+  <footer>
+  <p>&copy; <span id="year"></span> — Tous droits réservés.</p>
+</footer>
+
+
+
+</body>
+</html>

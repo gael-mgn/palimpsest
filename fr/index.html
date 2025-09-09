@@ -1,0 +1,1083 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Page avec intro animée (in-flow, no-scroll, centré)</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="../js/main.js"></script>
+
+
+  <link rel="stylesheet" href="../style/main.css">
+
+  <script>
+        // détection basique du mobile
+    const isMobile = window.innerWidth <= 768;
+
+  </script>
+
+  <style>
+
+    html.no-scroll, body.no-scroll{
+      height:100vh;
+      overflow:hidden;
+      touch-action:none;
+    }
+
+    /* ---------- Intro ---------- */
+    .intro{
+      position:fixed;
+      inset:0;
+      height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      gap:8px;
+      background:transparent;
+      z-index:60;
+      pointer-events:none;
+      transition:height .7s cubic-bezier(.16,.84,.44,1), transform .45s ease, opacity .4s ease;
+      will-change:height, transform, opacity;
+      padding:2rem;
+      text-align:center;
+
+     background: url('../img/toile.jpg') no-repeat center center;
+     background-size: cover;
+    }
+    .intro--collapse{ height:40vh; }
+    .intro--inflow{
+      position:relative;
+      inset:auto;
+      height:40vh;
+      width:100%;
+      z-index:10;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      gap:8px;
+      margin-top: var(--header-height, 0px);
+      transition: margin-top .35s ease, height .2s ease, padding .2s ease;
+      pointer-events:auto;
+      padding:2rem 1.25rem;
+    }
+
+    .intro-title{
+      font-weight:800;
+      font-size:clamp(3rem, 7.2vw, 6rem);
+      transform-origin:center center;
+      opacity:0;
+      animation:introPop 1900ms cubic-bezier(.16,.84,.44,1) forwards;
+      will-change:transform, opacity;
+      margin:0;
+      background: url('../img/image2.png') no-repeat center center;
+      background-size: cover;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    @keyframes introPop{
+      0%{opacity:0; transform:scale(.8) translateY(8px) rotate(.5deg); filter:blur(6px)}
+      40%{opacity:1; transform:scale(1.06) translateY(-6px) rotate(-.3deg); filter:blur(0)}
+      70%{transform:scale(.98) translateY(0)}
+      100%{opacity:1; transform:scale(1) translateY(0)}
+    }
+
+
+
+
+
+    /* Hide main initially and push it */
+    main{
+      margin-top:calc(100vh + 2rem);
+      opacity:0;
+      transform:translateY(12px);
+      transition:margin-top .6s cubic-bezier(.2,.9,.25,1), opacity .6s ease .08s, transform .6s ease .08s;
+      pointer-events:none;
+    }
+    body.show-content main{
+      margin-top:calc(40vh + 3.5rem);
+      opacity:1;
+      transform:none;
+      pointer-events:auto;
+    }
+    body.intro-in-flow main{ margin-top:0rem; }
+
+
+  </style>
+</head>
+<body class="no-scroll">
+
+  <!-- Intro -->
+  <section class="intro" aria-hidden="false">
+      <h1 class="intro-title">Palimpseste</h1>
+  </section>
+
+  <!-- Header -->
+  <header role="banner">
+
+    <!-- Desktop nav -->
+    <nav class="primary" role="navigation" aria-label="Navigation principale">
+      <a href="#">Accueil</a>
+      <a href="directory.html">Artistes</a>
+      <a href="athens.html">Athènes</a>
+      <a href="#">Contact</a>
+    </nav>
+
+    <!-- Mobile controls: hamburger -->
+    <div class="mobile-controls" style="display:flex;align-items:center;">
+      <button class="nav-toggle" id="navToggle" aria-controls="mobileNav" aria-expanded="false" aria-label="Ouvrir le menu">
+        <span class="bar" aria-hidden="true"></span>
+        <span class="bar" aria-hidden="true"></span>
+        <span class="bar" aria-hidden="true"></span>
+      </button>
+    </div>
+
+    <!-- Mobile nav panel (duplicate links for mobile) -->
+    <div id="mobileNav" class="mobile-nav" aria-hidden="true">
+      <div class="mobile-links" role="menu" aria-label="Menu principal">
+        <a href="#" role="menuitem">Accueil</a>
+        <a href="directory.html" role="menuitem">Artistes</a>
+        <a href="athens.html" role="menuitem">Athènes</a>
+        <a href="#" role="menuitem">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main role="main">
+    
+
+<style>
+
+  .article {
+    background-color: white;
+    max-width: 500px;
+  }
+</style>
+
+
+
+  <style>
+    
+    .cta-section {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 4rem 8%;
+      overflow: hidden;
+    }
+
+    /* Contenu */
+    .cta-content {
+      position: relative;
+      z-index: 2;
+      width: 90%;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+
+    .cta-content h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .cta-content p {
+      /*margin-bottom: 2rem;*/
+    }
+
+
+    /* Fond image : état initial (invisible) */
+    .cta-section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: url("../img/image.png") center/cover no-repeat;
+      opacity: 0;
+      clip-path: inset(0 50% 0 50%); /* fermé au centre */
+      z-index: 1;
+    }
+
+    /* Quand on ajoute .animate-bg → animation desktop */
+    .cta-section.animate-bg::before {
+      animation: reveal-horizontal 1.0s ease forwards;
+    }
+
+    @keyframes reveal-horizontal {
+      0% {
+        clip-path: inset(0 50% 0 50%);
+        opacity: 0;
+      }
+      100% {
+        clip-path: inset(0 0 0 0);
+        opacity: 1;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .cta-section {
+        padding: 2rem;
+      }
+    }
+  </style>
+  <section class="cta-section" id="cta">
+    <div class="cta-content">
+
+      <article class="relative p-4 rounded-lg shadow shadow-lg article">
+        <h3 class="font-semibold text-2xl">Athènes / Αθήνα</h3>
+
+        <p class="mt-2 pr-12"><em>Palimpseste</em> est un projet artistique collaboratif pensé pour voyager de ville en ville, révélant à chaque fois les mémoires, tensions et imaginaires propres aux métropoles. Ville antique et contemporaine, fragmentée et foisonnante, Athènes devient le premier palimpseste de cette archive partagée.
+        </p>
+        <style>
+          .button {
+            color: white;
+            transition: background-color 0.3s ease;
+            background-color: #0A1236;
+          }
+          .button:hover {
+            background-color: rgba(116,157,163,1);
+          }
+        </style>
+        <a href="athens.html" class="absolute bottom-4 right-4 w-9 h-9 flex items-center justify-center rounded-full button"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg></a>
+      </article>
+
+    </div>
+  </section>
+  <script>
+    function startAnimation() {
+      document.getElementById("cta").classList.add("animate-bg");
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+  <style>
+
+    :root{
+      --tile:#fbfbfb;            /* couleur des carreaux */
+      --grout:#d7d7d7;           /* couleur des joints */
+      --letter:#123238;         /* couleur des lettres (sombre, vert-bleu) */
+      --max-font:28px;
+    }
+
+    /* wrapper de la section */
+    .concorde-section{
+      position:relative;
+      /*min-height:60vh;*/
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      /* léger motif de carrelage qui rappelle la station */
+      background-image:
+        linear-gradient(to right, var(--grout) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grout) 1px, transparent 1px);
+      background-size:80px 80px; /* taille des "carreaux" */
+    }
+
+    /* SVG qui contient la grille de lettres, occupe tout le conteneur */
+    .letters-svg{
+      position:absolute;inset:0;width:100%;height:100%;display:block;
+      pointer-events:none; /* la grille est décorative */
+    }
+
+    /* style par défaut des lettres */
+    .letters-svg text.letter{
+      fill:var(--letter);
+      fill-opacity:.9;
+      font-family:'Cormorant Garamond', 'Georgia', 'Times', serif;
+      font-weight:600;
+      font-size:var(--max-font);
+      dominant-baseline:middle;
+      text-anchor:middle;
+      transform-origin:center;
+      opacity:0.95;
+      /* animation douce où les lettres flottent subtilement */
+      animation:float 6s ease-in-out infinite;
+    }
+
+    @keyframes float{
+      0%{transform:translateY(0) rotate(0) scale(1); opacity:0.95}
+      25%{transform:translateY(-6px) rotate(-1.2deg) scale(1.02);}
+      50%{transform:translateY(0) rotate(0) scale(1); opacity:0.85}
+      75%{transform:translateY(6px) rotate(1.2deg) scale(.99);}
+      100%{transform:translateY(0) rotate(0) scale(1); opacity:0.95}
+    }
+
+    /* variations pour que la grille ne soit pas trop mécanique */
+    .letters-svg text.small{font-size:0.72em; fill-opacity:.75}
+    .letters-svg text.light{fill-opacity:.6}
+    .letters-svg text.ghost{fill-opacity:.35}
+
+    /* concorde-overlay contenant le texte principal */
+    .concorde-overlay{
+      position:relative; /* au-dessus du SVG */
+      z-index:3;
+      width:100%;
+      padding:48px 48px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      align-items:flex-start;
+      justify-content:center;
+      box-sizing:border-box;
+
+      border-radius: 8px;
+      backdrop-filter: blur(1px);
+      background:rgba(255,255,255,0.6);
+    }
+
+    .concorde-overlay .content{
+      max-width: 1100px;
+      margin: auto;
+      position:relative;z-index:4; color: #0A1236;
+    }
+
+    .concorde-overlay h1{
+      font-size:clamp(1.6rem, 3.8vw, 3.2rem);letter-spacing:1px;
+        font-family: 'Playfair Display', serif;
+
+      color:#0A1236;
+    }
+    .concorde-overlay p{font-size:clamp(.95rem, 1.7vw, 1.1rem);opacity:.95;/*max-width:55ch*/}
+
+    /* petits ajustements responsive */
+    @media (max-width:640px){
+      :root{--max-font:20px}
+      .concorde-section{background-size:48px 48px}
+      .concorde-overlay{padding:28px}
+    }
+
+  </style>
+<section class="concorde-section" aria-label="Bannière style Concorde avec grille animée de lettres">
+  <!-- SVG dynamique créé par JS -->
+  <svg class="letters-svg" preserveAspectRatio="none" aria-hidden="true"></svg>
+
+  <!-- concorde-overlay semi-transparente avec texte par-dessus la grille -->
+  <div class="concorde-overlay" role="region" aria-label="Texte d'accroche">
+    <div class="backdrop" aria-hidden="true"></div>
+    <div class="content">
+      <h2 class="title">Chaque ville est un manuscrit sans fin, écrit, effacé et réinscrit par celles et ceux qui l’habitent.</h2>
+      <p>Palimpseste Urbain est un projet artistique collaboratif qui relie habitants, artistes et voyageurs autour d’une archive vivante des métropoles.<br>
+Mémoire, présent et futur s’y superposent comme des strates d’un même récit.<br>
+Photographies, récits, sons, graffitis, collages et visions poétiques viennent tisser une cartographie sensible, collective et évolutive.</p>
+<style>
+  #intention {
+    border: solid 1px #0A1236;
+  }
+  #intention:hover {
+    border: solid 1px white;
+    color: white;
+    background-color: #0A1236;
+  }
+</style>
+<a href="#services" class="btn" role="button" id="intention">En savoir plus</a>
+    </div>
+  </div>
+</section>
+<script>
+(() => {
+  const svg = document.querySelector('.letters-svg');
+  const str = `Cette collection accueille des textes qui explorent les formes poétiques actuelles,
+    qu’elles soient intimes, politiques, sociales ou expérimentales. La poésie y est envisagée
+    comme un laboratoire de langage et un miroir sensible du monde contemporain.`;
+  const pool = str.replace(/[,. '’]/g, '').toUpperCase();
+  const MAX_JITTER = 6;
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+
+  
+  // état
+  let paused = false;
+  let pendingResize = false;
+  let lastSize = { w: 0, h: 0 };
+  let resizeId = 0;
+  let letterNodes = [];
+
+  function build(force = false) {
+    if (paused && !force) return;
+
+    const w = Math.max(300, svg.clientWidth || window.innerWidth);
+    const h = Math.max(200, svg.clientHeight || window.innerHeight);
+
+    if (!force && letterNodes.length && lastSize.w === w && lastSize.h === h) {
+      return;
+    }
+
+    lastSize = { w, h };
+    const cellSize = Math.max(44, Math.min(88, Math.floor(Math.min(w, h) / 12)));
+    const cols = Math.max(2, Math.ceil(w / cellSize));
+    const rows = Math.max(2, Math.ceil(h / cellSize));
+    const total = cols * rows;
+
+    if (letterNodes.length !== total) {
+      svg.replaceChildren();
+      letterNodes = [];
+      svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+      svg.setAttribute('width', w);
+      svg.setAttribute('height', h);
+
+      const frag = document.createDocumentFragment();
+      let li = 0;
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const xBase = (cols === 1) ? w / 2 : (c * (w / (cols - 1)));
+          const yBase = (rows === 1) ? h / 2 : (r * (h / (rows - 1)));
+          const x = clamp(Math.round(xBase + (Math.random() * 2 - 1) * MAX_JITTER), 0, w);
+          const y = clamp(Math.round(yBase + (Math.random() * 2 - 1) * MAX_JITTER), 0, h);
+
+          const ch = pool[li % pool.length] || ' ';
+          li++;
+
+          const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          t.setAttribute('x', x);
+          t.setAttribute('y', y);
+
+          const classes = ['letter'];
+          if (Math.random() < 0.12) classes.push('small');
+          if (Math.random() < 0.25) classes.push('light');
+          if (Math.random() < 0.08) classes.push('ghost');
+          t.setAttribute('class', classes.join(' '));
+
+          t.textContent = ch;
+
+          // Sur desktop : animations actives
+          if (!isMobile) {
+            t.style.animationDelay = `${(Math.random() * 6).toFixed(2)}s`;
+            t.style.animationDuration = `${(5 + Math.random() * 6).toFixed(2)}s`;
+          } else {
+            // Sur mobile : pas d’animation
+            t.style.animation = 'none';
+          }
+
+          frag.appendChild(t);
+          letterNodes.push(t);
+        }
+      }
+      svg.appendChild(frag);
+    } else {
+      svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+      svg.setAttribute('width', w);
+      svg.setAttribute('height', h);
+    }
+
+    if (!paused && !isMobile) setAnimationState('running');
+  }
+
+  function rebuild() {
+    cancelAnimationFrame(resizeId);
+    resizeId = requestAnimationFrame(() => build());
+  }
+
+  function setAnimationState(state) {
+    for (const n of letterNodes) {
+      n.style.animationPlayState = state;
+    }
+  }
+
+  window.pauseLetters = () => {
+    if (paused) return;
+    paused = true;
+    setAnimationState('paused');
+    pendingResize = false;
+    cancelAnimationFrame(resizeId);
+  };
+
+  window.resumeLetters = () => {
+    if (!paused) return;
+    paused = false;
+    if (pendingResize) {
+      pendingResize = false;
+      build(true);
+    } else {
+      setAnimationState('running');
+    }
+  };
+
+  window.addEventListener('resize', () => {
+    const w = Math.max(300, svg.clientWidth || window.innerWidth);
+    const h = Math.max(200, svg.clientHeight || window.innerHeight);
+
+    if (paused) {
+      if (w !== lastSize.w || h !== lastSize.h) pendingResize = true;
+      return;
+    }
+    rebuild();
+  });
+
+  // build initial
+  build();
+
+  // si mobile : désactive tout mouvement
+  if (isMobile) {
+    window.pauseLetters();
+  }
+
+})();
+
+</script>
+
+
+
+
+  <style>
+    :root{
+      --section-height: 420px;
+      --active-width: 66.6666%;
+      --peek: 44px;
+      --transition: 520ms ease;
+      --muted:#6b7280;
+      --accent:#0b63ff;
+    }
+
+
+    .tile-section{width:100%; }
+    .tiles{position:relative; height:var(--section-height); display:grid; grid-template-rows:100%; gap:0; overflow:hidden; box-shadow: 0 10px 30px rgba(2,6,23,0.4); transition: grid-template-columns var(--transition)}
+
+    .tiles[data-active="1"]{ grid-template-columns: var(--active-width) calc((100% - var(--active-width))/2) calc((100% - var(--active-width))/2) }
+    .tiles[data-active="2"]{ grid-template-columns: calc((100% - var(--active-width))/2) var(--active-width) calc((100% - var(--active-width))/2) }
+    .tiles[data-active="3"]{ grid-template-columns: calc((100% - var(--active-width))/2) calc((100% - var(--active-width))/2) var(--active-width) }
+
+    .tile{position:relative; height:100%; overflow:hidden; cursor:pointer; display:flex; align-items:center; justify-content:center; transition: transform 360ms ease}
+
+    /* Background exemples */
+    .tile[data-index="1"]{ background: linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.15)), url('../img/image2.png') center/cover no-repeat }
+    .tile[data-index="2"]{ background: linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.15)), url('../img/present.webp') center/cover no-repeat }
+    .tile[data-index="3"]{ background: linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.15)), url('../img/futur.webp') center/cover no-repeat }
+
+    /* Peek visual kept subtle for depth */
+    .tile::after{ content:""; position:absolute; top:0; bottom:0; width:12px; right:0; background: linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,0.28)); opacity:0; transform: translateX(6px); transition: opacity 300ms ease, transform 300ms ease; pointer-events:none }
+    .tiles [aria-selected="false"]::after{ opacity:1; transform: translateX(0) }
+    .tiles > .tile:nth-child(3)::after{ left:0; right:auto; background: linear-gradient(270deg, rgba(0,0,0,0), rgba(0,0,0,0.28)) }
+
+    /* Mini-titlee: affichée sur les tuiles non-actives pour indiquer leur contenu */
+
+/* Mini-titleee centré horizontalement */
+/*.mini-titleee{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  padding:8px 12px;
+  background: rgba(255,255,255,0.92);
+  border-radius:999px;
+  font-weight:600;
+  font-size:13px;
+  color: red;
+  white-space:nowrap;
+  opacity:0;
+  transition: opacity 260ms ease, transform 260ms ease;
+  pointer-events:none;
+}*/
+
+
+    /* position spécifique : pour la tuile du milieu (index 2) afficher sur la droite, pour la droite (index 3) sur la gauche */
+    .tile[data-index="2"] .mini-titlee{ right:12px }
+    .tile[data-index="3"] .mini-titlee{ left:12px }
+
+    /* afficher mini-titlee uniquement lorsque la tuile est non-active */
+    .tiles [aria-selected="false"] .mini-titlee{ color: white; font-size: 22px; font-weight: bold; font-family: 'Playfair'; opacity:1; transform:translateY(-50%) translateX(0) }
+    .tiles [data-active-tile] .mini-titlee{ opacity:0; transform:translateY(-50%) translateX(6px) }
+
+    /* Overlayy centered white box: hidden by default, displayed via .overlayy--visible (JS) */
+    .overlayy{ position:absolute; left:50%; top:50%; transform: translate(-50%,-50%) translateY(8px); width:min(520px,78%); max-width:88%; background:#ffffff; padding:22px 26px; border-radius:10px; box-shadow:0 12px 30px rgba(2,6,23,0.45); text-align:center; opacity:0; transition: opacity 360ms ease, transform 420ms ease; z-index:6; pointer-events:auto }
+    .overlayy--visible{ opacity:1; transform: translate(-50%,-50%) translateY(0) }
+
+    .titlee{ font-size:clamp(16px,2vw,22px); font-weight:700; margin:0 0 8px; letter-spacing:0.1px }
+    .desc{ font-size:clamp(13px,1.1vw,15px); margin:0; opacity:0.9 }
+
+
+    /* Responsive/mobile: stacked, no animations; mini-titlees hidden; overlayys centered and full-width; remove margins between tiles */
+    @media (max-width:700px){
+      :root{ --section-height:auto; --peek:0 }
+      .tiles{ display:block; height:auto; transition:none !important }
+      .tile{ display:block; height:auto; min-height:220px; margin:0; border-radius:0; overflow:hidden; transition:none !important; transform:none !important; align-items:center; justify-content:center; position:relative }
+      .mini-titlee{ display:none }
+      .tile::after{ display:none !important }
+      /* En mobile, overlayy visible immédiatement (maintien du comportement précédent) */
+      .overlayy{ position:absolute; width:75%; margin:auto;padding:14px 16px; border-radius:8px; box-shadow:0 6px 18px rgba(2,6,23,0.12); opacity:1 !important; transition:none !important }
+      .titlee, .desc{ opacity:1 !important; transform:none !important }
+      .tile:last-child{ margin-bottom:0 }
+    }
+
+    /* Accessibility focus style */
+    .tile:focus{ outline: 3px solid rgba(11,99,255,0.18); outline-offset: 2px }
+
+  </style>
+<section class="tile-section">
+  <!-- La tuile centrale (index 2) est active par défaut -->
+  <div class="tiles" id="tiles" data-active="2" role="tablist" aria-label="Section tuiles">
+
+    <article class="tile" data-index="1" tabindex="0" role="tab" aria-selected="false" aria-hidden="true">
+      <div class="overlayy">
+        <h3 class="titlee">Mémoire</h3>
+        <p class="desc">Récits d’anciens habitants, archives historiques et familiales, souvenirs liés aux quartiers.</p>
+      </div>
+      <div class="mini-titlee" aria-hidden="true">Mémoire</div>
+    </article>
+
+    <article class="tile" data-index="2" data-active-tile aria-hidden="false" tabindex="0" role="tab" aria-selected="true">
+      <div class="overlayy">
+        <h3 class="titlee">Présent</h3>
+        <p class="desc">Images du quotidien, créations contemporaines, graffitis, sons urbains, témoignages de migrants, fragments de vie.</p>
+      </div>
+      <div class="mini-titlee" aria-hidden="true">Présent</div>
+    </article>
+
+    <article class="tile" data-index="3" tabindex="0" role="tab" aria-selected="false" aria-hidden="true">
+      <div class="overlayy">
+        <h3 class="titlee">Futur</h3>
+        <p class="desc">Projections poétiques, fictions, collages visuels et sonores qui imaginent la vie de demain.</p>
+      </div>
+      <div class="mini-titlee" aria-hidden="true">Futur</div>
+    </article>
+
+  </div>
+</section>
+
+
+<script>
+  if (!isMobile){
+  (function(){
+    const tilesWrap = document.getElementById('tiles');
+    const tiles = Array.from(tilesWrap.querySelectorAll('.tile'));
+    const mediaMobile = window.matchMedia('(max-width:700px)');
+    // fallback timeout (en ms) — un léger dépassement par rapport à la transition CSS
+    const TRANSITION_TIMEOUT = 700;
+    const OVERLAYy_TIMEOUT = 500; // fallback for overlayy fadeout
+
+    // délai (ms) pendant lequel la souris doit rester immobile sur la tuile
+    const HOVER_DELAY = 25;
+
+    let pendingTimer = null;
+    let hoverTimer = null;
+    let hoverIndex = null;
+
+    // DEFAULT_ACTIVE récupéré depuis l'HTML (data-active) — utilisé pour restaurer l'état par défaut
+    const DEFAULT_ACTIVE = Number(tilesWrap.getAttribute('data-active')) || 1;
+    let currentActive = DEFAULT_ACTIVE;
+
+    function clearPending(){
+      if(pendingTimer) { clearTimeout(pendingTimer); pendingTimer = null; }
+    }
+
+    function clearHover(){
+      if(hoverTimer){ clearTimeout(hoverTimer); hoverTimer = null; hoverIndex = null; }
+    }
+
+    function startHoverTimer(idx){
+      // si mobile, on n'utilise pas le hover delay
+      if(mediaMobile.matches) return;
+      // si déjà actif, inutile
+      if(idx === currentActive) return;
+
+      clearHover();
+      hoverIndex = idx;
+      hoverTimer = setTimeout(() => {
+        hoverTimer = null;
+        hoverIndex = null;
+        // appel de setActive uniquement si la souris est toujours sur la même tuile
+        setActive(idx);
+      }, HOVER_DELAY);
+    }
+
+    function resetHoverTimer(idx){
+      // pointermove => on remet le timer à zéro (sauf si idx déjà actif)
+      if(mediaMobile.matches) return;
+      if(idx === currentActive) return;
+      if(hoverIndex !== idx){
+        // nouvelle tuile : redémarrer le timer
+        startHoverTimer(idx);
+      } else {
+        // même tuile : remettre le timer
+        clearHover();
+        startHoverTimer(idx);
+      }
+    }
+
+    function showOverlayyFor(index){
+      // retirer sur toutes
+      tiles.forEach(t => {
+        const ov = t.querySelector('.overlayy');
+        if(ov) ov.classList.remove('overlayy--visible');
+      });
+      // ajouter sur la tuile active (si elle existe)
+      const activeTile = tilesWrap.querySelector('.tile[data-index="'+ index +'"]');
+      if(activeTile){
+        const ov = activeTile.querySelector('.overlayy');
+        if(ov) ov.classList.add('overlayy--visible');
+      }
+    }
+
+    // Fonction utilitaire : ajuster les dimensions des images du carrousel
+    // - si tu utilises un carrousel custom, tu peux écouter l'événement 'carousel-resize'
+    // - sinon, on redimensionne directement les images trouvées dans .carousel img
+    function adjustCarouselImages(){
+      // dispatch event for external carousels to handle their resizing
+      const ev = new CustomEvent('carousel-resize', { detail: { from: 'tiles' }});
+      window.dispatchEvent(ev);
+
+      // Basic fallback: if there's a .carousel element with imgs, adjust them (example simple logic)
+      const carousel = document.querySelector('.carousel');
+      if(carousel){
+        const imgs = Array.from(carousel.querySelectorAll('img'));
+        if(imgs.length){
+          // Exemple : forcer hauteur cohérente selon la section active (tu peux personnaliser)
+          const activeWidth = getComputedStyle(document.documentElement).getPropertyValue('--active-width') || '66.6666%';
+          imgs.forEach(img => {
+            // Ex: recommander une largeur max (ici juste pour démonstration)
+            img.style.maxWidth = '100%';
+            img.style.height = 'auto';
+            // si tu veux un calcul plus fin, le fais ici
+          });
+        }
+      }
+    }
+
+    // setActive : nouvelle logique
+    function setActive(index){
+      // si déjà actif : ne rien faire
+      if(index === currentActive) return;
+
+      // s'il y avait un timer de hover, l'enlever (évite double appel)
+      clearHover();
+
+      // ✅ mettre en pause les lettres avant de lancer transition
+      if(window.pauseLetters) pauseLetters();
+
+      // element overlayy actuellement visible (si any)
+      const prevActiveTile = tilesWrap.querySelector('.tile[data-active-tile]');
+      const prevOverlayy = prevActiveTile ? prevActiveTile.querySelector('.overlayy') : null;
+
+      // 1) cacher l'overlayy visible (si présent)
+      if(prevOverlayy && prevOverlayy.classList.contains('overlayy--visible')){
+        prevOverlayy.classList.remove('overlayy--visible');
+
+        // attendre la fin de la disparition (transition opacity) avant d'ajuster les images du carrousel
+        const onOverlayyTransitionEnd = (ev) => {
+          if(!ev.propertyName || ev.propertyName.indexOf('opacity') === -1) return;
+          prevOverlayy.removeEventListener('transitionend', onOverlayyTransitionEnd);
+          clearTimeout(overlayyFallback);
+          // maintenant on peut ajuster le carrousel (demande de l'utilisateur)
+          try { adjustCarouselImages(); } catch(e){ /* swallow errors */ }
+
+          // après l'ajustement, on peut procéder au changement de layout / active
+          proceedToLayoutChange(index);
+        };
+
+        // fallback si transitionend ne se déclenche pas
+        const overlayyFallback = setTimeout(() => {
+          prevOverlayy.removeEventListener('transitionend', onOverlayyTransitionEnd);
+          try { adjustCarouselImages(); } catch(e){}
+          proceedToLayoutChange(index);
+        }, OVERLAYy_TIMEOUT);
+
+        prevOverlayy.addEventListener('transitionend', onOverlayyTransitionEnd);
+      } else {
+        // pas d'overlayy visible (ex: initialisation ou mobile) -> ajuster immédiatement
+        try { adjustCarouselImages(); } catch(e){}
+        proceedToLayoutChange(index);
+      }
+    }
+
+    // séparation des étapes : modifier le layout, mettre à jour attributs, attendre transition grid, puis afficher overlayy
+    function proceedToLayoutChange(index){
+      // Mettre à jour l'état (layout)
+      tilesWrap.setAttribute('data-active', String(index));
+      tiles.forEach(t => {
+        const idx = Number(t.getAttribute('data-index'));
+        if(idx === index){
+          t.setAttribute('data-active-tile', 'true');
+          t.setAttribute('aria-selected', 'true');
+          t.removeAttribute('aria-hidden');
+        }else{
+          t.removeAttribute('data-active-tile');
+          t.setAttribute('aria-selected', 'false');
+          t.setAttribute('aria-hidden', 'true');
+        }
+      });
+
+      // on retire les overlayys (ils devraient déjà être cachés) pour être sûr
+      tiles.forEach(t => {
+        const ov = t.querySelector('.overlayy');
+        if(ov) ov.classList.remove('overlayy--visible');
+      });
+
+      clearPending();
+
+      // Si mobile, afficher tout de suite (comportement responsive)
+      if(mediaMobile.matches){
+        showOverlayyFor(index);
+        currentActive = index;
+        return;
+      }
+
+      // Attendre la fin de la transition de grid-template-columns sur .tiles
+      const onTransitionEnd = (ev) => {
+        if(!ev.propertyName || ev.propertyName.indexOf('grid-template') === -1) return;
+        tilesWrap.removeEventListener('transitionend', onTransitionEnd);
+        clearPending();
+        // afficher overlayy final
+        showOverlayyFor(index);
+        currentActive = index;
+        if(window.resumeLetters) resumeLetters();
+      };
+
+      tilesWrap.addEventListener('transitionend', onTransitionEnd);
+
+      // fallback : si transitionend ne se déclenche pas, on montre l'overlayy après un timeout
+      pendingTimer = setTimeout(() => {
+        tilesWrap.removeEventListener('transitionend', onTransitionEnd);
+        pendingTimer = null;
+        showOverlayyFor(index);
+        currentActive = index;
+        if(window.resumeLetters) resumeLetters();
+      }, TRANSITION_TIMEOUT);
+    }
+
+    // Initialisation
+    // Enlève immédiatement les overlayys et appelle setActive(DEFAULT_ACTIVE) pour que l'overlayy apparaisse après l'animation initiale
+    tiles.forEach(t => {
+      const ov = t.querySelector('.overlayy');
+      if(ov) ov.classList.remove('overlayy--visible');
+    });
+    // currentActive récupéré depuis DEFAULT_ACTIVE
+    currentActive = DEFAULT_ACTIVE;
+    // si mobile, afficher overlayy de l'actif tout de suite
+    if(mediaMobile.matches){
+      showOverlayyFor(currentActive);
+    } else {
+      // lancer l'overlayy du premier après l'animation initiale (même comportement qu'avant)
+      const onInitTransitionEnd = (ev) => {
+        if(!ev.propertyName || ev.propertyName.indexOf('grid-template') === -1) return;
+        tilesWrap.removeEventListener('transitionend', onInitTransitionEnd);
+        showOverlayyFor(currentActive);
+      };
+      tilesWrap.addEventListener('transitionend', onInitTransitionEnd);
+      // fallback
+      setTimeout(() => showOverlayyFor(currentActive), TRANSITION_TIMEOUT);
+    }
+
+    tiles.forEach(tile => {
+      const idx = Number(tile.getAttribute('data-index'));
+
+      // --- Hover: changer la slide uniquement après que la souris se soit arrêtée ---
+      // pointerenter -> démarre le timer
+      tile.addEventListener('pointerenter', () => startHoverTimer(idx));
+      // pointermove -> réinitialise le timer (la souris bouge dans la tuile)
+      tile.addEventListener('pointermove', () => resetHoverTimer(idx));
+      // pointerleave -> annule le timer
+      tile.addEventListener('pointerleave', () => clearHover());
+
+      // Clic et clavier restent immédiats
+      tile.addEventListener('click', () => {
+        clearHover();
+        if(idx === currentActive) return;
+        setActive(idx);
+      });
+      tile.addEventListener('keydown', (e)=> {
+        if(e.key === 'Enter' || e.key === ' '){
+          e.preventDefault();
+          clearHover();
+          if(idx === currentActive) return;
+          setActive(idx);
+        }
+      });
+    });
+
+    // leave restores default (optional) — maintenant restaure la tuile par défaut depuis data-active
+    tilesWrap.addEventListener('mouseleave', ()=> {
+      clearHover();
+      setActive(DEFAULT_ACTIVE);
+    });
+
+    // Si la largeur change et on bascule en mobile/desktop, on gère l'affichage
+    window.addEventListener('resize', () => {
+      // si mobile, forcer affichage overlayy sur actif; sinon, s'assurer qu'il est caché jusqu'à la prochaine transition
+      const activeIndex = Number(tilesWrap.getAttribute('data-active')) || currentActive || DEFAULT_ACTIVE;
+      if(mediaMobile.matches){
+        showOverlayyFor(activeIndex);
+      }else{
+        // cacher overlayys — ils réapparaîtront après la prochaine sélection/transition
+        tiles.forEach(t => {
+          const ov = t.querySelector('.overlayy');
+          if(ov) ov.classList.remove('overlayy--visible');
+        });
+      }
+    });
+
+  })();
+}
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <style>
+    :root{
+      --section-height-lab: 60vh;
+      --overlay-color-lab: rgba(111,150,156,0.7); /* teinte au-dessus de l'image pour lisibilité */
+      --text-color-lab: #F2F2F2;
+      --blur-radius: 4px;
+      --bg-image: url('../img/lab.png'); /* remplace par ton image */
+    }
+
+    /* Section principale */
+    .hero-lab {
+      position: relative;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    /* Image de fond floutée via pseudo-élément */
+    .hero-lab::before{
+      content: "";
+      position: absolute;
+      inset: 0; /* top:0; right:0; bottom:0; left:0 */
+      background-image: var(--bg-image);
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+
+      /* on agrandit légèrement pour compenser le recadrage dû au flou */
+      transform: scale(1.05);
+
+      /* le flou visuel */
+      filter: blur(var(--blur-radius));
+      z-index: 0;
+      will-change: transform, filter;
+    }
+
+    /* Superposition (overlay) sombre pour contraster le texte */
+    .hero-lab::after{
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--overlay-color-lab);
+      z-index: 1;
+    }
+
+    /* Contenu placé au-dessus */
+    .hero-lab__content{
+      color: var(--text-color-lab);
+      position: relative; /* au-dessus des pseudo-éléments */
+      z-index: 2;
+      padding: clamp(2rem, 3vw, 2.5rem) 0;
+
+      max-width: 1100px;
+      width: 90%;
+    }
+
+    .hero-lab__title{
+      font-size: clamp(1.4rem, 4vw, 2.8rem);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      text-shadow: 0 6px 18px rgba(0,0,0,0.45);
+    }
+
+    .hero-lab__subtitle{
+      margin: 0;
+      font-size: clamp(.95rem, 2.2vw, 1.2rem);
+      margin-inline: auto;
+    }
+
+
+    /* Amélioration : pour les navigateurs qui ne supportent pas filter sur pseudo (très rare) */
+    @supports not (filter: blur(1px)) {
+      .hero-lab::before {
+        filter: none;
+        transform: none;
+        opacity: .65;
+      }
+    }
+
+    /* Responsive: réduire la hauteur sur très petits écrans */
+
+  </style>
+    <section class="hero-lab" aria-labelledby="hero-lab-title" role="region">
+      <div class="hero-lab__content">
+        <h2 id="hero-lab-title" class="title">Vous souhaitez contribuer, collaborer ou soutenir le projet ?</h2>
+        <p class="hero-lab__subtitle">Vous êtes <span class="bold">artiste</span>, <span class="bold">habitant·e</span>, <span class="bold">étudiant·e</span> ou simple curieux·se ?<br>
+Votre voix a sa place dans Palimpseste Urbain. Chaque contribution devient une strate de la ville.</p>
+        <p class="hero-lab__subtitle"><span class="bold">Institutions culturelles</span>, <span class="bold">galeries</span>, <span class="bold">collectifs</span>, <span class="bold">mécènes</span> : vos partenariats permettront de donner vie et visibilité à cette archive vivante.</p>
+        <a href="#services" class="btn" role="button">Nous contacter</a>
+      </div>
+    </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </main>
+
+  <script src="../js/index.js"></script>
+
+
+
+
+  <footer>
+  <p>&copy; <span id="year"></span> — Tous droits réservés.</p>
+</footer>
+
+
+
+</body>
+</html>
+
+
+

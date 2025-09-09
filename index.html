@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Redirection...</title>
+ <script>
+  (async () => {
+    const userLang = navigator.language.split(/[-_]/)[0]; // "fr", "en", etc.
+    const fallbackLangs = ["fr", "en", "es"];
+    const triedLangs = [userLang, ...fallbackLangs.filter(l => l !== userLang)];
+
+    const checkExists = async (lang) => {
+      try {
+        const response = await fetch(`./${lang}/index.html`, { method: 'HEAD' });
+        return response.ok;
+      } catch {
+        return false;
+      }
+    };
+
+    for (const lang of triedLangs) {
+      const exists = await checkExists(lang);
+      if (exists) {
+        window.location.replace(`./${lang}/index.html`);
+        break;
+      }
+    }
+  })();
+</script>
+
+</head>
+<body>
+  <!--<p>Redirection en cours...</p>-->
+</body>
+</html>

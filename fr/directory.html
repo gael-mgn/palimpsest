@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Artistes — Recherche</title>
+
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+
+      <script src="../js/main.js"></script>
+      <link rel="stylesheet" href="../style/main.css">
+
+
+  <style>
+    :root{
+      --bg:#f7f9fb; --card:#ffffff; --muted:#555; --accent:rgba(116,157,163,1); --glass: rgba(0,0,0,0.04);
+      --radius:12px; font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{margin-top: 50px}
+
+    .container{max-width:900px; width: 90%; margin:0 auto; margin-bottom: 4rem;}
+    .annuaire-header{display:flex;gap:18px;align-items:center;margin-bottom:20px}
+    .header .brand{display:flex;flex-direction:column;}
+
+    p.lead{margin:0;color:var(--muted);font-size:13px}
+
+    .search-card{background:var(--card); padding:18px;border-radius:var(--radius); box-shadow: 0 4px 12px rgba(0,0,0,0.06); display:flex; gap:12px; align-items:center}
+    .search-input{flex:1; display:flex; gap:10px; align-items:center}
+    input[type="search"]{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(0,0,0,0.1); background:#fff; color:inherit; outline:none}
+    input[type="search"]::placeholder{color:var(--muted)}
+    .controls{display:flex; gap:10px; align-items:center}
+    button.clear{background:#f0f0f0;border:1px solid rgba(0,0,0,0.1); padding:8px 12px;border-radius:8px; cursor:pointer;color:#333}
+
+    .list-card{margin-top:18px; background:var(--card); padding:16px; border-radius:var(--radius); box-shadow:0 4px 12px rgba(0,0,0,0.06)}
+    .meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+    .count{color:var(--muted);font-size:13px}
+
+    ul.directory{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr; gap:10px}
+    li.card{padding:10px;border-radius:10px;background:#fafafa; border:1px solid rgba(0,0,0,0.08); display:flex; justify-content:space-between; align-items:center; gap:10px}
+    .name{display:flex;flex-direction:column}
+    .surname{font-weight:700; letter-spacing:0.4px;color:#222}
+    .firstname{color:var(--muted); font-size:13px}
+    .actions{display:flex; gap:8px}
+    .btn{padding:6px 10px;border-radius:8px;border:0;cursor:pointer;background:transparent;color:var(--accent);font-weight:600}
+    .btn.secondary{color:var(--muted);border:1px solid rgba(0,0,0,0.1);padding:6px 8px}
+
+    mark{background:rgba(116,157,163,0.2); color:var(--accent); padding:2px 4px;border-radius:4px}
+
+    .help{margin-top:12px;color:var(--muted);font-size:13px}
+
+    @media (max-width:520px){.annuaire-header{flex-direction:column;align-items:flex-start} ul.directory{grid-template-columns:1fr}}
+
+
+    
+  </style>
+
+</head>
+<body>
+
+
+
+
+
+  <!-- Header -->
+  <header role="banner">
+
+    <!-- Desktop nav -->
+    <nav class="primary" role="navigation" aria-label="Navigation principale">
+      <a href="index.html">Accueil</a>
+      <a href="#">Artistes</a>
+      <a href="athens.html">Athens</a>
+      <a href="#">Contact</a>
+    </nav>
+
+    <!-- Mobile controls: hamburger -->
+    <div class="mobile-controls" style="display:flex;align-items:center;">
+      <button class="nav-toggle" id="navToggle" aria-controls="mobileNav" aria-expanded="false" aria-label="Ouvrir le menu">
+        <span class="bar" aria-hidden="true"></span>
+        <span class="bar" aria-hidden="true"></span>
+        <span class="bar" aria-hidden="true"></span>
+      </button>
+    </div>
+
+    <!-- Mobile nav panel (duplicate links for mobile) -->
+    <div id="mobileNav" class="mobile-nav" aria-hidden="true">
+      <div class="mobile-links" role="menu" aria-label="Menu principal">
+        <a href="index.html" role="menuitem">Accueil</a>
+        <a href="#" role="menuitem">Artistes</a>
+        <a href="#" role="menuitem">Projets</a>
+        <a href="#" role="menuitem">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <script src="../js/sub.js"></script>
+
+
+
+
+  <div class="container">
+    <div class="annuaire-header">
+      <div class="brand">
+        <h1 class="title">Annuaire</h1>
+        <p class="lead">Rechercher des membres par NOM prénom — recherche instantanée</p>
+      </div>
+    </div>
+
+    <div class="search-card" role="region" aria-label="Recherche annuaire">
+      <div class="search-input">
+        <input id="search" type="search" placeholder="Rechercher par NOM ou prénom (ex: DUPONT)" aria-label="Recherche" autofocus />
+      </div>
+      <div class="controls">
+        <button id="clearBtn" class="clear" title="Effacer la recherche">Effacer</button>
+      </div>
+    </div>
+
+    <div class="list-card" aria-live="polite">
+      <div class="meta">
+        <div class="count" id="count">0 résultats</div>
+      </div>
+
+      <ul id="directory" class="directory">
+        <li class="card" data-url="https://gael-maignan.fr/"><div class="name"><span class="surname">MAIGNAN</span><span class="firstname">Gaël</span></div><div class="actions"><button class="btn" data-action="open">Voir</button></div></li>
+        <li class="card" data-url=""><div class="name"><span class="surname">MAIGNAN</span><span class="firstname">Alexandre</span></div><div class="actions"><button class="btn" data-action="open">Voir</button></div></li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    const searchInput = document.getElementById('search');
+    const directory = document.getElementById('directory');
+    const items = Array.from(directory.querySelectorAll('li.card'));
+    const count = document.getElementById('count');
+    const clearBtn = document.getElementById('clearBtn');
+
+    function normalize(s){
+      return s.normalize('NFD').replace(/\p{Diacritic}/gu,'').toUpperCase();
+    }
+
+    function updateCount(visible){
+      count.textContent = visible + (visible>1 ? ' résultats' : visible===1 ? ' résultat' : ' résultats');
+    }
+
+    function highlight(text, needle){
+      if(!needle) return text;
+      const re = new RegExp('('+escapeRegExp(needle)+')','ig');
+      return text.replace(re, '<mark>$1</mark>');
+    }
+
+    function escapeRegExp(string){
+      return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function filterDirectory(){
+      const q = normalize(searchInput.value.trim());
+      let visible = 0;
+      items.forEach(li =>{
+        const surnameEl = li.querySelector('.surname');
+        const firstnameEl = li.querySelector('.firstname');
+        const surname = normalize(surnameEl.textContent);
+        const firstname = normalize(firstnameEl.textContent);
+        const combined = surname + ' ' + firstname;
+
+        const match = q === '' || surname.includes(q) || firstname.includes(q) || combined.includes(q);
+        if(match){
+          li.style.display = '';
+          visible++;
+
+          surnameEl.innerHTML = highlight(surnameEl.textContent, searchInput.value.trim());
+          firstnameEl.innerHTML = highlight(firstnameEl.textContent, searchInput.value.trim());
+        } else {
+          li.style.display = 'none';
+        }
+      });
+      updateCount(visible);
+    }
+
+    filterDirectory();
+
+    searchInput.addEventListener('input', () => filterDirectory());
+
+    clearBtn.addEventListener('click', ()=>{searchInput.value=''; filterDirectory(); searchInput.focus();});
+
+    searchInput.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter'){
+        const visible = items.find(i=> i.style.display !== 'none');
+        if(!visible) return;
+        const btn = visible.querySelector('button[data-action="open"]');
+        if(btn) btn.focus();
+      }
+    });
+
+    directory.addEventListener('click', e=>{
+      const btn = e.target.closest('button');
+      if(!btn) return;
+      const li = btn.closest('li.card');
+      const url = li.dataset.url;
+      const action = btn.dataset.action;
+
+      if(action === 'open'){
+        if(url){
+          const isExternal = url.startsWith('http');
+          if(isExternal) window.open(url, '_blank'); else window.location.href = url;
+        } else {
+          alert('Aucune URL définie pour cette fiche.');
+        }
+      }
+    });
+  </script>
+
+
+  <footer>
+  <p>&copy; <span id="year"></span> — Tous droits réservés.</p>
+</footer>
+
+</body>
+</html>

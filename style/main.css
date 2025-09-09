@@ -1,0 +1,197 @@
+a {
+  color: inherit;
+  text-decoration: none;
+}
+      .bold {
+        font-weight: bold;
+      }
+    .btn{
+      display: inline-block;
+      margin-top: 1.5rem;
+      padding: .6rem 1.1rem;
+      background: rgba(255,255,255,0.25);
+      color: inherit;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      backdrop-filter: blur(4px); /* joli effet si disponible */
+
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover{
+      color: rgba(116,157,163);
+      border: 1px solid rgba(116,157,163);
+      background: white;
+    }
+
+
+    h1, h2, h3, .title { font-family: 'Playfair Display', serif; }
+
+    /* Reset minimal */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      background:#ffffff;
+      color:#0A1236;
+      overflow-x:hidden;
+    }
+
+        .title { line-height:1.00; font-size:clamp(2.6rem, 7.2vw, 3.5rem); padding-bottom: 2rem; }
+
+
+
+
+
+    /* ---------- Header (responsive) ---------- */
+    header{
+      position:fixed;
+      top:0;
+      left:0;
+      right:0;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:14px 28px;
+      backdrop-filter: blur(6px);
+      background:rgba(116,157,163,0.6);
+      border-bottom:1px solid rgba(16,24,40,0.05);
+      transform:translateY(-100%);
+      opacity:0;
+      transition:transform .65s cubic-bezier(.2,.9,.25,1), opacity .5s ease;
+      z-index:70;
+      pointer-events:none;
+      color: white;
+    }
+    header .brand{font-weight:700; font-family: 'Playfair Display', serif; font-size: 1.2rem}
+    /* Desktop nav */
+    nav.primary { display:flex; gap:14px; align-items:center; margin:auto; }
+    nav.primary a{font-size:1.1rem; text-decoration:none; color:inherit; opacity:.9}
+
+    /* Nav toggle (mobile) */
+    .nav-toggle{
+      display:none;
+      background:transparent;
+      border:0;
+      padding:8px;
+      margin-left:8px;
+      cursor:pointer;
+      line-height:0;
+    }
+    .nav-toggle .bar{
+      display:block;
+      width:22px;
+      height:2px;
+      background:currentColor;
+      margin:4px 0;
+      transition: transform .25s ease, opacity .2s ease;
+    }
+
+    /* Mobile nav panel (hidden by default) */
+    .mobile-nav{
+      position:absolute;
+      top:100%;
+      left:0;
+      right:0;
+
+      background: rgba(255,255,255,0.9);
+      border-bottom:1px solid rgba(16,24,40,0.04);
+      box-shadow: 0 10px 30px rgba(16,24,40,0.06);
+      transform: translateY(-10px);
+      opacity:0;
+      pointer-events:none;
+      transition: transform .28s cubic-bezier(.16,.84,.44,1), opacity .2s ease;
+      z-index:69;
+       color: rgb(116,157,163);
+    }
+    .mobile-nav.open{ transform: translateY(0); opacity:1; pointer-events:auto; }
+    .mobile-nav .mobile-links{ display:flex; flex-direction:column; gap:8px; padding:12px 18px; }
+    .mobile-nav a{ padding:10px 8px; text-decoration:none; color:inherit; font-weight:600; opacity:.95; }
+
+
+
+    /* When header is shown */
+    body.show-content header{
+      transform:translateY(0);
+      opacity:1;
+      pointer-events:auto;
+    }
+
+/* Small screen layout */
+    @media (max-width: 900px){
+      header{ padding:12px 16px; }
+      nav.primary{ display:none; } /* hide desktop nav */
+      .nav-toggle{ display:inline-flex; }
+      /* brand shrink */
+      header .brand{ font-size:1rem; }
+    }
+
+    /* Larger screens: ensure mobile nav hidden */
+    @media (min-width:901px){
+      .mobile-nav{ display:none; }
+    }
+
+
+
+
+    footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+  color: rgba(116,157,163,1);
+  background-color: #f2f2f2;
+}
+
+
+
+
+
+#lang-switcher {
+  position: fixed;
+  top: 6px;
+  right: 6px;
+  z-index: 9999;
+  padding: 6px 12px;
+  border-radius: 10px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+@media (max-width: 768px){
+  #lang-switcher {
+  background: transparent;
+}
+}
+
+
+
+#lang-switcher button {
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  padding: 4px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+#lang-switcher button:hover {
+  transform: scale(1.2);
+}
+
+#lang-switcher button.active {
+  outline: 2px solid white;
+  border-radius: 8px;
+}
+#lang-switcher svg {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+}
