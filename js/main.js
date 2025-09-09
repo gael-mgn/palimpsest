@@ -184,7 +184,7 @@
           if (altOk) {
             // mise à jour de l'ancre
             a.href = altUrl;
-            a.style.color = 'orange'; // signal visuel
+            //a.style.color = 'orange'; // signal visuel
             a.title = `Version trouvée dans une autre langue : ${lang}`;
             return;
           }
