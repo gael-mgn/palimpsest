@@ -2,11 +2,67 @@
   'use strict';
 
   // === Config ===
-  const AVAILABLE_LANGS = ['en', 'fr', 'es'];
+  const AVAILABLE_LANGS = ['en', 'fr', 'gk'];
   const FLAG_ICONS = {
-    en: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30"><clipPath id="t"><path d="M30,15 h30 v15 h-30 z v15 h-30 v-15 z v-15 h30 z"/></clipPath><path d="M0,0 v30 h60 v-30 z" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#t)" stroke="#C8102E" stroke-width="4"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></svg>`,
+    en: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" role="img" aria-labelledby="title desc">
+  <title id="title">Union Flag (United Kingdom)</title>
+  <desc id="desc">Union Jack: blue field with white and red crosses and saltires</desc>
+
+  <!-- Fond bleu -->
+  <rect width="60" height="30" fill="#012169"/>
+
+  <!-- Diagonales blanches (saltires) -->
+  <g stroke="#fff" stroke-width="6" stroke-linecap="square" fill="none">
+    <path d="M0 0 L60 30"/>
+    <path d="M60 0 L0 30"/>
+  </g>
+
+  <!-- Diagonales rouges (saltires) — derrière la croix centrale -->
+  <g stroke="#C8102E" stroke-width="4" stroke-linecap="square" fill="none">
+    <path d="M0 0 L60 30"/>
+    <path d="M60 0 L0 30"/>
+  </g>
+
+  <!-- Croix blanche centrale (horizontale + verticale) -->
+  <g stroke="#fff" stroke-width="10" stroke-linecap="square" fill="none">
+    <path d="M30 0 L30 30"/>
+    <path d="M0 15 L60 15"/>
+  </g>
+
+  <!-- Croix rouge centrale (sur la blanche) -->
+  <g stroke="#C8102E" stroke-width="6" stroke-linecap="square" fill="none">
+    <path d="M30 0 L30 30"/>
+    <path d="M0 15 L60 15"/>
+  </g>
+</svg>
+`,
     fr: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="1" height="2" x="0" fill="#0055A4"/><rect width="1" height="2" x="1" fill="#fff"/><rect width="1" height="2" x="2" fill="#EF4135"/></svg>`,
-    es: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"><rect width="3" height="2" fill="#AA151B"/><rect width="3" height="1" y="0.5" fill="#F1BF00"/></svg>`
+    gk: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27 18" role="img" aria-labelledby="title desc">
+  <title id="title">Drapeau de la Grèce</title>
+  <desc id="desc">Neuf bandes horizontales bleu et blanc avec un canton bleu portant une croix blanche</desc>
+
+  <!-- Couleur bleu officiel approximée -->
+  <defs>
+    <style> .gblue{fill:#0D5EAF} </style>
+  </defs>
+
+  <rect x="0" y="0" width="27" height="18" fill="#fff"/>
+
+  <!-- Neuf bandes (hauteur totale 18 -> chaque bande = 2) -->
+  <!-- bandes bleues aux positions 0,2,4,6,8 -->
+  <rect class="gblue" x="0" y="0" width="27" height="2"/>
+  <rect class="gblue" x="0" y="4" width="27" height="2"/>
+  <rect class="gblue" x="0" y="8" width="27" height="2"/>
+  <rect class="gblue" x="0" y="12" width="27" height="2"/>
+  <rect class="gblue" x="0" y="16" width="27" height="2"/>
+
+  <!-- Canton : carré de côté 10 (5 bandes * 2) -->
+  <rect class="gblue" x="0" y="0" width="10" height="10"/>
+
+  <!-- Croix blanche dans le canton (épaisseur = 2) -->
+  <rect x="4" y="0" width="2" height="10" fill="#fff"/>
+  <rect x="0" y="4" width="10" height="2" fill="#fff"/>
+</svg>`
   };
   const FETCH_TIMEOUT_MS = 5000;     // timeout pour HEAD
   const CONCURRENCY = 6;             // limite de requêtes parallèles pour vérifs
