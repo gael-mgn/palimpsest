@@ -527,6 +527,378 @@ Photographies, récits, sons, graffitis, collages et visions poétiques viennent
 
 
 
+<style>
+  
+  :root{
+  /* palette principale (thème clair) */
+  --palimpsest-accent: #749DA3;           /* couleur demandée — teinte principale */
+  --palimpsest-accent-strong: #5b8a8f;    /* variante légèrement plus sombre */
+  --bg-0: #ffffff;             /* page principale */
+  --bg-1: #f4fbfb;             /* légère nuance pour gradient */
+  --artCard: #ffffff;             /* fond des cartes */
+  --muted: #6b7b7c;            /* texte secondaire */
+  --text: #0f2a2b;             /* texte principal sombre */
+  --border: rgba(15,42,43,0.06);
+  --gap: 1rem; --radius: 12px; --artCard-w: 320px;
+  --easing: cubic-bezier(.22,.9,.26,1);
+  --fade-dur: 480ms; --move-dur: 600ms;
+  --glass: rgba(116,157,163,0.08);
+}
+
+.art {
+  text-align: center;
+  padding-bottom: 2rem;
+  padding-top: 2rem;
+  /*background: linear-gradient(180deg, var(--bg-0) 0%, var(--bg-1) 100%);*/
+
+max-width: 1100px;
+margin: auto;
+}
+
+/* header */
+/* corrige le header et centre horizontalement les contrôles */
+.art-header {
+  display: flex;            /* remplacement de display:column (invalide) */
+  flex-direction: column;
+  align-items: center;      /* centre horizontalement tout le contenu du header */
+  gap: 0.5rem;
+}
+
+/* centre les 3 boutons au milieu */
+.controls{
+  display:flex;
+  justify-content:center;   /* <-- centre les éléments enfants horizontalement */
+  gap:.5rem;
+  align-items:center;
+  width:100%;               /* s'assure qu'il prenne toute la largeur disponible */
+  margin-bottom:1rem;
+}
+.artSection-title{color:var(--palimpsest-accent);}
+p.lead{margin:0;color:var(--muted);font-size:.95rem;margin-bottom:1rem}
+
+/* controls */
+.timeline{
+  display:flex;gap:.25rem;
+  background: rgba(116,157,163,0.06);
+  padding:.35rem;border-radius:999px;
+  border:1px solid var(--border);
+}
+.timeline button{
+  background:transparent;border:0;padding:.45rem .65rem;border-radius:999px;
+  color:var(--muted);cursor:pointer;font-weight:600;
+  transition: background .18s, color .18s, transform .12s;
+}
+.timeline button:hover{transform:translateY(-2px)}
+.timeline button[aria-pressed="true"]{
+  background: linear-gradient(180deg, var(--palimpsest-accent) 0%, var(--palimpsest-accent-strong) 100%);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(116,157,163,0.12);
+}
+
+/* grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--artCard-w),1fr));gap:var(--gap)}
+
+/* artCard (light style) */
+.artCard{
+  background: linear-gradient(180deg, rgba(11,18,20,0.02), rgba(11,18,20,0.01));
+  /* we keep a subtly textured overlay but use white base */
+  background-color: var(--artCard);
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow: 0 8px 24px rgba(15,42,43,0.06);
+  display:flex;flex-direction:column;min-height:220px;
+  border: 1px solid var(--border);
+  transition: transform .22s, box-shadow .22s;
+}
+.artCard:focus-within,.artCard:hover{transform:translateY(-6px); box-shadow: 0 12px 36px rgba(15,42,43,0.09);}
+
+/* media */
+.artCard-media{
+  position:relative;aspect-ratio:16/9;background: linear-gradient(180deg, rgba(116,157,163,0.05), rgba(116,157,163,0.02));
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+  border-bottom:1px solid rgba(15,42,43,0.03);
+}
+
+/* temporal layers: keep animations but lighter */
+.temporal{
+  position:absolute;inset:0;padding:1rem;display:block;pointer-events:none;
+  opacity:0;transform:translateY(12px) scale(.995);
+  transition:opacity var(--fade-dur) var(--easing), transform var(--move-dur) var(--easing);
+  will-change:opacity,transform;
+}
+.temporal img, .temporal video{width:100%;height:100%;object-fit:cover;border-radius:8px}
+.temporal .text{
+  background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.95));
+  height:100%;display:flex;align-items:center;justify-content:center;padding:1rem;border-radius:8px;color:var(--muted);
+  box-shadow: 0 4px 12px rgba(15,42,43,0.04);
+}
+
+/* visible temporal layer */
+.artCard[data-tempo="past"] .temporal[data-tempo="past"],
+.artCard[data-tempo="present"] .temporal[data-tempo="present"],
+.artCard[data-tempo="future"] .temporal[data-tempo="future"]{
+  opacity:1;transform:none;pointer-events:auto;z-index:2
+}
+
+/* outgoing/entering */
+.temporal.leaving{opacity:0;transform:translateY(-6px) scale(.99);z-index:1}
+.temporal.entering{opacity:1;transform:none;z-index:3}
+
+/* flip variant */
+.artCard.is-flipping{perspective:900px}
+.artCard.is-flipping .temporal{transform-origin:50% 50%}
+.artCard.is-flipping .temporal.entering{transform:rotateX(0deg) translateZ(0)}
+.artCard.is-flipping .temporal.leaving{transform:rotateX(12deg) translateZ(-40px);opacity:0}
+
+/* meta */
+/* footer / meta: colonne centrée */
+.meta{
+  padding:.8rem 1rem;
+  display:flex;            /* corrigé : display:flex au lieu de display:column */
+  flex-direction:column;
+  align-items:center;      /* centre horizontalement le contenu (contrôles + info) */
+  gap:.5rem;
+}
+
+/* centre les contrôles locaux et limite leur largeur pour rester élégant */
+.artCard-controls{
+  display:flex;
+  justify-content:center;  /* CENTRE les 3 boutons horizontalement */
+  gap:.35rem;
+  width:100%;
+  max-width:260px;         /* limite la largeur du groupe (optionnel) */
+}
+
+/* conserve le style des boutons mais évite qu'ils s'étirent */
+.artCard-controls button{
+  flex: 0 0 auto;          /* empêche l'étirement */
+  padding:.45rem .65rem;
+  border-radius:8px;
+}
+.meta .info{display:flex;flex-direction:column}
+.meta .art-title{font-weight:700;color:var(--text);margin-top: .5rem}
+.meta .sub{font-size:.85rem;color:var(--muted)}
+
+/* artCard controls */
+.artCard-controls button{
+  background:transparent;border:1px solid rgba(15,42,43,0.04);
+  padding:.35rem .5rem;border-radius:8px;color:var(--muted);cursor:pointer;
+  transition: background .16s, color .16s, border-color .16s;
+}
+.artCard-controls button[aria-pressed="true"]{
+  background: var(--palimpsest-accent);
+  color:#fff;border-color:transparent;
+}
+
+/* small screens */
+@media (max-width:540px){:root{--artCard-w:100%}}
+
+/* placeholders */
+.placeholder{font-size:.95rem;color:var(--muted);text-align:center}
+
+/* Accessibility focus */
+button:focus{outline:3px solid rgba(116,157,163,0.18); outline-offset:2px}
+
+</style>
+
+  <section class="art">
+  <div class="art-header">
+    <div>
+      <h2 class="artSection-title title">Palimpsestes artistiques</h2>
+      <p class="lead">Chaque œuvre contient 3 temporalités — passé / présent / futur. Cliquez pour naviguer globalement ou par œuvre.</p>
+    </div>
+    <div class="controls">
+      <nav class="timeline" role="tablist" aria-label="Choisir la temporalité globale">
+        <button data-timeline="past" aria-pressed="false">Passé</button>
+        <button data-timeline="present" aria-pressed="true">Présent</button>
+        <button data-timeline="future" aria-pressed="false">Futur</button>
+      </nav>
+    </div>
+  </div>
+
+  <div class="grid" id="grid">
+
+    <!-- artCard 1: Photo (past) / Photo (present) / Texte (future) -->
+    <article class="artCard" tabindex="0" data-tempo="present" aria-label="Palimpseste 1">
+      <div class="artCard-media">
+        <div class="temporal" data-tempo="past">
+          <!-- small svg data-uri placeholder image representing past -->
+          <img alt="Photographie ancienne" src='../img/memoire.png'>
+        </div>
+        <div class="temporal" data-tempo="present">
+          <img alt="Photographie actuelle" src='../img/present.png'>
+        </div>
+        <div class="temporal" data-tempo="future">
+          <div class="text">
+            <div>
+              <h3 style="margin:0;color:#fff">Hypothèse future</h3>
+              <p class="placeholder">Un court texte spéculatif décrivant une possible transformation de l'œuvre.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="meta">
+        <div class="artCard-controls" role="tablist" aria-label="Temporalité par œuvre">
+          <button data-local="past" aria-pressed="false" title="Passé">Passé</button>
+          <button data-local="present" aria-pressed="true" title="Présent">Présent</button>
+          <button data-local="future" aria-pressed="false" title="Futur">Futur</button>
+        </div>
+        <div class="info">
+          <div class="art-title">Palimpseste — Façade</div>
+          <div class="sub">Auteur • 2024</div>
+        </div>
+      </footer>
+    </article>
+
+    <!-- artCard 2: Vidéo / Photo / Audio -->
+    <article class="artCard" tabindex="0" data-tempo="present" aria-label="Palimpseste 2">
+      <div class="artCard-media">
+        <div class="temporal" data-tempo="past">
+          <div class="text"><div><h3 style="margin:0;color:#fff">Vidéo — archive</h3><p class="placeholder">Remplacer par une vidéo d'archive (utilisez data-src pour lazy-load).</p></div></div>
+        </div>
+        <div class="temporal" data-tempo="present">
+          <img alt="Capture vidéo actuelle" src='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675"><rect width="100%" height="100%" fill="%23101420"/><text x="50%" y="50%" font-size="36" fill="%23ffffff" text-anchor="middle" dominant-baseline="middle">Clip — Présent</text></svg>'>
+        </div>
+        <div class="temporal" data-tempo="future">
+          <div class="text"><div><h3 style="margin:0;color:#fff">Audio — avenir</h3><p class="placeholder">Bruitages, composition sonore projetée.</p></div></div>
+        </div>
+      </div>
+      <footer class="meta">
+        <div class="artCard-controls" role="tablist" aria-label="Temporalité par œuvre">
+          <button data-local="past" aria-pressed="false">Passé</button>
+          <button data-local="present" aria-pressed="true">Présent</button>
+          <button data-local="future" aria-pressed="false">Futur</button>
+        </div>
+        <div class="info">
+          <div class="art-title">Palimpseste — Son/Images</div>
+          <div class="sub">Atelier multimédia</div>
+        </div>
+      </footer>
+    </article>
+
+    <!-- artCard 3: Texte / Audio / Photo -->
+    <article class="artCard" tabindex="0" data-tempo="present" aria-label="Palimpseste 3">
+      <div class="artCard-media">
+        <div class="temporal" data-tempo="past">
+          <div class="text"><blockquote style="margin:0;color:var(--muted)">"Extrait d'un journal ancien — fragment retrouvé."</blockquote></div>
+        </div>
+        <div class="temporal" data-tempo="present">
+          <div class="text"><p class="placeholder">Performance audio en cours — remplacez par un player audio.</p></div>
+        </div>
+        <div class="temporal" data-tempo="future">
+          <img alt="Simulation future" src='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675"><rect width="100%" height="100%" fill="%23061a2b"/><text x="50%" y="50%" font-size="36" fill="%23ffd166" text-anchor="middle" dominant-baseline="middle">Image — Futur</text></svg>'>
+        </div>
+      </div>
+      <footer class="meta">
+        <div class="artCard-controls" role="tablist" aria-label="Temporalité par œuvre">
+          <button data-local="past" aria-pressed="false">Passé</button>
+          <button data-local="present" aria-pressed="true">Présent</button>
+          <button data-local="future" aria-pressed="false">Futur</button>
+        </div>
+        <div class="info">
+          <div class="art-title">Palimpseste — Texte</div>
+          <div class="sub">Archive // Projet</div>
+        </div>
+      </footer>
+    </article>
+
+  </div>
+</section>
+
+  <script>
+    // Timeline controls (global)
+    const timelineBtns = document.querySelectorAll('[data-timeline]');
+    const artCards = Array.from(document.querySelectorAll('.artCard'));
+
+    function animateartCardTempo(artCard, target){
+      // find current visible layer
+      const curLayer = artCard.querySelector('.temporal[data-tempo][style], .temporal[data-tempo]')
+      const old = Array.from(artCard.querySelectorAll('.temporal')).find(l => l.dataset.tempo === artCard.getAttribute('data-tempo'));
+      const next = artCard.querySelector(`.temporal[data-tempo="${target}"]`);
+      if(!next) return artCard.setAttribute('data-tempo', target);
+
+      // mark leaving and entering for CSS transitions
+      if(old && old !== next){
+        old.classList.remove('entering');
+        old.classList.add('leaving');
+      }
+      next.classList.remove('leaving');
+      next.classList.add('entering');
+
+      // apply the semantic state change (this drives which layer should be considered primary)
+      artCard.setAttribute('data-tempo', target);
+
+      // temporary flip class for a bit of 3D depth, mostly on global changes
+      artCard.classList.add('is-flipping');
+      // cleanup after transition
+      setTimeout(()=>{
+        if(old) old.classList.remove('leaving');
+        if(next) next.classList.remove('entering');
+        artCard.classList.remove('is-flipping');
+      }, 700);
+    }
+
+    function setGlobalTempo(tempo){
+      artCards.forEach(c => c.setAttribute('data-tempo', tempo));
+      timelineBtns.forEach(b => b.setAttribute('aria-pressed', b.dataset.timeline === tempo));
+      // per-artCard controls update
+      document.querySelectorAll('.artCard-controls button').forEach(btn => {
+        btn.setAttribute('aria-pressed', btn.dataset.local === tempo);
+      });
+    }
+
+    timelineBtns.forEach(btn => btn.addEventListener('click', ()=> setGlobalTempo(btn.dataset.timeline)));
+
+    // Per-artCard controls (local changes should NOT affect the global controller)
+    document.querySelectorAll('.artCard').forEach(artCard => {
+      const controls = artCard.querySelectorAll('.artCard-controls button');
+      controls.forEach(b=> b.addEventListener('click', ()=>{
+        const t = b.dataset.local;
+        // animate only this artCard
+        animateartCardTempo(artCard, t);
+        // toggle pressed states for this artCard only
+        controls.forEach(x=> x.setAttribute('aria-pressed', x === b));
+      }));
+
+      // convenient: double-click article to cycle timeline
+      artCard.addEventListener('dblclick', ()=>{
+        const order = ['past','present','future'];
+        const cur = artCard.getAttribute('data-tempo');
+        const next = order[(order.indexOf(cur) + 1) % order.length];
+        animateartCardTempo(artCard, next);
+        // sync per-artCard controls
+        const controls = artCard.querySelectorAll('.artCard-controls button');
+        controls.forEach(x=> x.setAttribute('aria-pressed', x.dataset.local === next));
+      });
+    });
+
+    // initial state
+    setGlobalTempo('present');
+
+    // OPTIONAL: lazy-load media when its temporal layer becomes visible
+    const observer2 = new MutationObserver(muts => {
+      muts.forEach(m => {
+        if(m.type !== 'attributes' || m.attributeName !== 'data-tempo') return;
+        const c = m.target;
+        const visible = c.getAttribute('data-tempo');
+        c.querySelectorAll('.temporal').forEach(layer => {
+          if(layer.dataset.tempo === visible){
+            const media = layer.querySelector('[data-src]');
+            if(media && !media.src){ media.src = media.dataset.src; }
+          }
+        });
+      });
+    });
+    artCards.forEach(c => observer2.observe(c, {attributes:true}));
+
+    // keyboard shortcuts: 1(Past) 2(Present) 3(Future) globally
+    window.addEventListener('keydown', e => {
+      if(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if(e.key === '1') setGlobalTempo('past');
+      if(e.key === '2') setGlobalTempo('present');
+      if(e.key === '3') setGlobalTempo('future');
+    });
+  </script>
 
 
 
